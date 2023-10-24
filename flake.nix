@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,9 +14,13 @@
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nur.url = "github:nix-community/NUR";
 
-    spicetify-nix = {
-          url = "github:Gerg-L/spicetify-nix";
-     inputs.nixpkgs.follows = "nixpkgs"; 
+    # spicetify-nix = {
+    #       url = "github:Gerg-L/spicetify-nix";
+    #  inputs.nixpkgs.follows = "nixpkgs"; 
+    #   };
+      spicetify-nix = {
+      url = "github:the-argus/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs"; 
       };
     };
 
@@ -32,7 +37,7 @@
     in {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs system; };
+          specialArgs = { inherit inputs; };
           modules = [ ./nixos/configuration.nix ];
         };
       };

@@ -1,18 +1,10 @@
-{ lib, config, pkgs, ... }:
-{
-  imports = [../spicetify.nix];
+{ lib, config, pkgs, ... }: {
+  imports = [ ../spicetify.nix ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  home.packages = [
-  pkgs.pamixer
-  pkgs.pciutils
-  pkgs.gcc
-  ];
-nixpkgs.config.allowUnfree = true;
-  # imports = [ ../spicetify.nix ];
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
+  home.packages = [ pkgs.pamixer pkgs.tree pkgs.pciutils pkgs.gcc ];
+  nixpkgs.config.allowUnfree = true;
+  home.sessionVariables = { EDITOR = "nvim"; };
 
   programs.git = {
     enable = true;
@@ -25,13 +17,6 @@ nixpkgs.config.allowUnfree = true;
     };
   };
 
-  gtk = {
-    enable = true;
-    theme.name = "adw-gtk3";
-    cursorTheme.name = "Bibata-Modern-Ice";
-    iconTheme.name = "GruvboxPlus";
-  };
-  
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;

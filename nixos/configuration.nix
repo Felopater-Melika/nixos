@@ -1,4 +1,4 @@
-# { inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports = [
@@ -44,7 +44,7 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
   programs.hyprland = {
     enable = true;
     xwayland.enable = false;
@@ -130,8 +130,7 @@
 
   users.users.philopater = {
     isNormalUser = true;
-    extraGroups =
-      [ "wheel" "bluetooth" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "bluetooth" "networkmanager" ];
     packages = with pkgs; [ ];
   };
 
@@ -139,7 +138,6 @@
     vim
     nixfmt
     rofi-wayland
-    git
     gh
     home-manager
     swww
