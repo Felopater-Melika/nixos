@@ -1,18 +1,17 @@
 { inputs, config, pkgs, ... }:
-
 {
   imports = [
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
   ];
 
+  users.users.philopater.shell = "${pkgs.zsh}/bin/zsh";
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     users = { philopater = import ./home.nix; };
   };
 
   nixpkgs.config.permittedInsecurePackages = [ "python-2.7.18.7" ];
-
   fileSystems = {
     "/" = { options = [ "compress=zstd" ]; };
     "/home" = { options = [ "compress=zstd" ]; };
@@ -47,7 +46,7 @@
   # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
   programs.hyprland = {
     enable = true;
-    xwayland.enable = false;
+    xwayland.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -117,7 +116,6 @@
 
   services.xserver.libinput.enable = true;
   virtualisation.docker.enable = true;
-  programs.fish.enable = true;
   programs.dconf.enable = true;
   services.supergfxd.enable = true;
   services.asusd = {
@@ -130,13 +128,28 @@
 
   users.users.philopater = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "bluetooth" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "bluetooth"
+      "networkmanager"
+      "docker"
+      "audio"
+      "libvirtd"
+      "kvm"
+      "disk"
+      "input"
+      "media"
+      "plugdev"
+      "lxd"
+      "adbusers"
+      "users"
+      "video"
+    ];
     packages = with pkgs; [ ];
   };
 
   environment.systemPackages = with pkgs; [
-    vim
-    nixfmt
+      nixfmt
     rofi-wayland
     gh
     home-manager
@@ -145,13 +158,11 @@
     neofetch
     pfetch
     fontconfig
-    cliphist
     ripgrep
     qemu
     jetbrains-mono
     polkit_gnome
     pavucontrol
-    nodejs
     python3Full
     eza
     python.pkgs.pip
@@ -161,19 +172,41 @@
     cava
     waybar
     libnotify
-    grim
-    slurp
-    webcord
-    discord
-    betterdiscordctl
     bluez
     blueman
     neovim
+    (pkgs.discord.override {
+  src = builtins.fetchTarball {
+    url = "https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.tar.gz";
+    sha256 = "sha256:0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd";
+  };
+  withOpenASAR = true;
+  withVencord = true;
+  vencord = (pkgs.vencord.overrideAttrs {
+    src = fetchFromGitHub {
+      owner = "Vendicated";
+      repo = "Vencord";
+      rev = "70943455161031d63a4481249d14833afe94f5a5";
+      hash = "sha256-i/n7qPQ/dloLUYR6sj2fPJnvvL80/OQC3s6sOqhu2dQ=";
+    };
+  });
+})
     kitty
     firefox
     wget
   ];
 
+nixpkgs.overlays = [
+   
+  (self: super: {
+    discord = super.discord.overrideAttrs (
+      _: { src = builtins.fetchTarball {
+        url = "https://discord.com/api/download?platform=linux&format=tar.gz";
+        sha256 = "0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd"; #52 0's
+      }; }
+    );
+  }) 
+  ];
   services.openssh.enable = true;
 
   networking.firewall.enable = false;
