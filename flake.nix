@@ -55,7 +55,7 @@
     in {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit stable-pkgs inputs; };
+          specialArgs = { inherit stable-pkgs hyprland-plugins inputs; };
           modules = [ ./nixos/configuration.nix ];
         };
       };
