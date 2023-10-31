@@ -12,6 +12,9 @@
     pkgs.gammastep
     pkgs.electron
     pkgs.wayout
+    pkgs.kubectl
+    pkgs.jira-cli-go
+    pkgs.kubernetes
     pkgs.btop
     pkgs.k9s
     pkgs.bun
@@ -24,17 +27,9 @@
     pkgs.teams-for-linux
     pkgs.zoom-us
     pkgs.jetbrains-toolbox
-    pkgs.zsh-vi-mode
     pkgs.fcitx5
     pkgs.gnome.nautilus
     pkgs.catppuccin-kvantum
-    pkgs.zsh-f-sy-h
-    pkgs.zsh-history
-    pkgs.zsh-fzf-tab
-    pkgs.zsh-nix-shell
-    pkgs.oh-my-zsh
-    pkgs.nix-zsh-completions
-    pkgs.zsh-better-npm-completion
     pkgs.light
     pkgs.brightnessctl
     pkgs.libnotify
@@ -119,8 +114,14 @@
     EDITOR = "nvim";
     "QT_STYLE_OVERRIDE" = "kvantum";
     SHELL = "${pkgs.zsh}/bin/zsh";
+    XCURSOR_THEME = "Catppuccin-Mocha-Dark-Cursors";
   };
 
+home.pointerCursor = {
+  gtk.enable = true;
+  package = pkgs.catppuccin-cursors.mochaDark;
+  name = "Catppuccin-Mocha-Dark-Cursors";
+};
   programs.git = {
     enable = true;
     userName = "Felopater Melika";
@@ -223,7 +224,7 @@
     };
 
     cursorTheme = {
-      name = "Catppuccin-Mocha-Dark";
+      name = "Catppuccin-Mocha-Dark-Cursors";
       package = pkgs.catppuccin-cursors.mochaDark;
       size = 24;
     };
@@ -365,6 +366,22 @@
     };
   programs = {
     zsh = {
+      oh-my-zsh = {
+        enable = true;
+        custom = "/home/philopater/.config/zsh-custom";
+        plugins = [
+        "forgit"
+        "appup"
+        "kctl"
+        "zsh-dotnet-completion"
+        "docker"
+        "npm"
+        "vi-mode"
+        "nix-shell"
+        "F-Sy-H"
+        "fzf-tab"
+        ];
+      };
       enable = true;
       dotDir = ".config/zsh";
 
@@ -379,7 +396,7 @@
       };
 
       initExtra = ''
-        neofetch
+          nitch
           bindkey '^[[1;5C' forward-word # Ctrl+RightArrow
           bindkey '^[[1;5D' backward-word # Ctrl+LeftArrow
 
@@ -398,14 +415,8 @@
               ln -sf $(which ruff) $x;
             done
           }
-          source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-          source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
-          source ${pkgs.zsh-forgit}/share/zsh/zsh-forgit/forgit.plugin.zsh
-          source ${pkgs.zsh-better-npm-completion}/share
-          source ${pkgs.zsh-f-sy-h}/share/zsh/site-functions/F-Sy-H.plugin.zsh
-          source ${pkgs.zsh-history}/share/zsh/history.zsh
-          source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
 
+          setopt AUTO_CD
           eval "$(zoxide init zsh)"
           export EDITOR=nvim
       '';
@@ -415,6 +426,7 @@
         ll = "eza -la --git --color=always --icons=always";
         tree = "eza --tree  --icons=always --git --color=always";
         dev = "nix develop -c zsh";
+        swi = "sudo nixos-rebuild switch --flake .#myNixos";
 
         ip = "ip --color";
         ipb = "ip --color --brief";
@@ -811,8 +823,7 @@ exec-once=~/.config/hypr/scripts/startup
 # exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 # Screensharing
 exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-#exec-once=hyprctl setcursor [THEME] [SIZE]
-
+exec-once=hyprctl setcursor Catppuccin-Mocha-Dark-Cursors 24
 exec-once = wl-paste --type text --watch cliphist store #Stores only text data
 exec-once = wl-paste --type image --watch cliphist store #Stores only image data
 

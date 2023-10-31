@@ -1,6 +1,7 @@
 { inputs, config, pkgs, stable-pkgs, ... }:
-
-{
+let 
+     tokyo-night-sddm = pkgs.libsForQt5.callPackage ./tokyo-night-sddm/default.nix { };
+in {
   imports = [
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
@@ -38,15 +39,16 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
   # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
-  # };
+  #    font = "Lat2-Terminus16";
+  #    keyMap = "us";
+  #    useXkbConfig = true; # use xkbOptions in tty.
+  #  };
 
   services.xserver.enable = true;
-  services.geoclue2.enable = true;
+ # services.geoclue2.enable = true;
   services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.displayManager.gdm.wayland = true;
+  services.xserver.displayManager.sddm.theme = "tokyo-night-sddm";
+
    xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
       programs.hyprland = {
@@ -75,7 +77,7 @@
   hardware.opengl.enable = true;
 
   environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
+    # WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
   };
 
@@ -155,6 +157,7 @@
 
   environment.systemPackages = with pkgs; [
     nixfmt
+    tokyo-night-sddm
     rofi-wayland
     gh
     home-manager
