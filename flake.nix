@@ -38,7 +38,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager, chaotic, nur, hyprland
-    , hyprland-contrib, spicetify-nix, nixpkgs-stable, hy3, ... }@inputs:
+    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3, ... }@inputs:
     let
       system = "x86_64-linux";
 
