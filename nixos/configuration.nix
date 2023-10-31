@@ -47,7 +47,8 @@ in {
   services.xserver.enable = true;
  # services.geoclue2.enable = true;
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.sddm.theme = "tokyo-night-sddm";
+  services.xserver.displayManager.sddm.theme = "tokyo-night-sddm";  
+
 
    xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];

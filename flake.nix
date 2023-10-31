@@ -13,6 +13,11 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
 
+    hyprland-plugins = {
+      inputs.hyprland.follows = "hyprland";
+      url = "github:hyprwm/hyprland-plugins";
+    };  
+
     hyprland-contrib.url = "github:hyprwm/contrib";
 
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";

@@ -1,4 +1,4 @@
-{ lib, config, pkgs, inputs, ... }: {
+{ hyprland-plugins, lib, config, pkgs, inputs, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default
  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
@@ -482,7 +482,9 @@ home.pointerCursor = {
         wayland.windowManager.hyprland={
           enable = true;
 	xwayland.enable = true;
-          plugins = [ inputs.hy3.packages.${pkgs.system}.default
+          plugins = [ 
+          (pkgs.callPackage ./hyprbars.nix { inherit hyprland-plugins; } )
+          inputs.hy3.packages.${pkgs.system}.default
             ];
           extraConfig = ''
 $rosewaterAlpha = f5e0dc
@@ -694,6 +696,23 @@ plugin {
         }
     }
 }
+
+    plugin {
+         hyprbars {
+           bar_height = 0
+           bar_color = 0xee
+           col.text = 0xff
+           bar_text_font = 
+           bar_text_size = 12
+
+           buttons {
+             button_size = 0
+             col.maximize = 0xff
+             col.close = 0xff
+             }
+         }
+       }
+
 
 #-- Keybindings ----------------------------------------------------
 # Variables
