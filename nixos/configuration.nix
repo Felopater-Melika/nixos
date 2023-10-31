@@ -1,4 +1,5 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, stable-pkgs, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
@@ -11,7 +12,8 @@
     users = { philopater = import ./home.nix; };
   };
 
-  nixpkgs.config.permittedInsecurePackages = [ "python-2.7.18.7" ];
+  nixpkgs.config.permittedInsecurePackages =
+    [ "electron-24.8.6" "python-2.7.18.7" ];
   fileSystems = {
     "/" = { options = [ "compress=zstd" ]; };
     "/home" = { options = [ "compress=zstd" ]; };
@@ -19,12 +21,14 @@
   };
 
   boot.loader.systemd-boot.enable = true;
+
   # boot.loader.grub = {
   #  enable = true;
   #  version = 2;
   #  device = "/dev/nvme0n1p1";
   #  useOSProber = true;
   # };
+
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos";
@@ -40,14 +44,15 @@
   # };
 
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
-  xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
+  services.geoclue2.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.displayManager.gdm.wayland = true;
+   xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+      programs.hyprland = {
+      enable = true;
+      xwayland.enable = true;
+      };
 
   nixpkgs.config.allowUnfree = true;
 
@@ -149,7 +154,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-      nixfmt
+    nixfmt
     rofi-wayland
     gh
     home-manager
@@ -170,45 +175,192 @@
     tldr
     swaylock
     cava
+    logiops
     waybar
     libnotify
     bluez
     blueman
+    brave
+    geoclue2
     neovim
     (pkgs.discord.override {
-  src = builtins.fetchTarball {
-    url = "https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.tar.gz";
-    sha256 = "sha256:0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd";
-  };
-  withOpenASAR = true;
-  withVencord = true;
-  vencord = (pkgs.vencord.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "Vendicated";
-      repo = "Vencord";
-      rev = "70943455161031d63a4481249d14833afe94f5a5";
-      hash = "sha256-i/n7qPQ/dloLUYR6sj2fPJnvvL80/OQC3s6sOqhu2dQ=";
-    };
-  });
-})
+      src = builtins.fetchTarball {
+        url =
+          "https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.tar.gz";
+        sha256 = "sha256:0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd";
+      };
+      withOpenASAR = true;
+      withVencord = true;
+      vencord = (pkgs.vencord.overrideAttrs {
+        src = fetchFromGitHub {
+          owner = "Vendicated";
+          repo = "Vencord";
+          rev = "70943455161031d63a4481249d14833afe94f5a5";
+          hash = "sha256-i/n7qPQ/dloLUYR6sj2fPJnvvL80/OQC3s6sOqhu2dQ=";
+        };
+      });
+    })
     kitty
     firefox
     wget
   ];
 
-nixpkgs.overlays = [
-   
-  (self: super: {
-    discord = super.discord.overrideAttrs (
-      _: { src = builtins.fetchTarball {
-        url = "https://discord.com/api/download?platform=linux&format=tar.gz";
-        sha256 = "0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd"; #52 0's
-      }; }
-    );
-  }) 
+  nixpkgs.overlays = [
+
+    (self: super: {
+      discord = super.discord.overrideAttrs (_: {
+        src = builtins.fetchTarball {
+          url = "https://discord.com/api/download?platform=linux&format=tar.gz";
+          sha256 =
+            "0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd"; # 52 0's
+        };
+      });
+    })
   ];
   services.openssh.enable = true;
+  systemd.services.logiops = {
+    description = "An unofficial userspace driver for HID++ Logitech devices";
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.logiops}/bin/logid";
+    };
+  };
 
+  # Configuration for logiops
+  environment.etc."logid.cfg".text = ''
+       // Logiops (Linux driver) configuration for Logitech MX Master 3.
+    // Includes gestures, smartshift, DPI.
+    // Tested on logid v0.2.3 - GNOME 3.38.4 on Zorin OS 16 Pro
+    // What's working:
+    //   1. Window snapping using Gesture button (Thumb)
+    //   2. Forward Back Buttons
+    //   3. Top button (Ratchet-Free wheel)
+    // What's not working:
+    //   1. Thumb scroll (H-scroll)
+    //   2. Scroll button
+
+    // File location: /etc/logid.cfg
+
+    devices: ({
+      name: "MX Master 3S";
+
+      smartshift: {
+        on: true;
+        threshold: 15;
+      };
+     
+     hiresscroll: {
+       hires: true;
+       invert: false;
+       target: false;
+     };
+
+      dpi: 1500; // max=4000
+
+      buttons: (
+        // Forward button for Copy
+        {
+          cid: 0x53;
+          action = {
+            type: "Keypress";
+            keys: [ "KEY_LEFTCTRL", "KEY_C" ];
+          };
+        },
+        // Back button for Paste
+        {
+          cid: 0x56;
+          action = {
+            type: "Keypress";
+            keys: [ "KEY_LEFTCTRL", "KEY_V" ];
+          };
+        },
+        // Gesture button (hold and move)
+        {
+          cid: 0xc3;
+          action = {
+            type: "Gestures";
+            gestures: (
+              {
+                direction: "None";
+                mode: "OnRelease";
+                action = {
+                  type: "Keypress";
+                  keys: [ "KEY_LEFTMETA", "KEY_S" ]; // Windows + S
+                }
+              },
+    	 {
+                direction: "Up";
+                mode: "OnRelease";
+                action = {
+                  type: "Keypress";
+                  keys: [ "KEY_LEFTCTRL", "KEY_A" ]; // Ctrl+A to select all
+                }
+              },
+              {
+                direction: "Down";
+                mode: "OnRelease";
+                action = {
+                  type: "Keypress";
+                  keys: [ "KEY_LEFTMETA", "KEY_V" ]; // Windows+V
+                }
+              },
+              {
+                direction: "Right";
+                mode: "OnRelease";
+                action = {
+                  type: "Keypress";
+                  keys: [ "KEY_LEFTMETA", "KEY_X" ]; // Windows+X
+                }
+              },
+              {
+                direction: "Left";
+                mode: "OnRelease";
+                action = {
+                  type: "Keypress";
+                  keys: [ "KEY_LEFTMETA", "KEY_I" ]; // Windows+I
+                }
+              },        
+            );
+          };
+        },
+    	
+        // Top button
+        {
+          cid: 0xc4;
+          action = {
+            type: "Gestures";
+            gestures: (
+              {
+                direction: "None";
+                mode: "OnRelease";
+                action = {
+                  type: "ToggleSmartShift";
+                }
+              },
+
+              {
+                direction: "Up";
+                mode: "OnRelease";
+                action = {
+                  type: "ChangeDPI";
+                  inc: 1000,
+                }
+              },
+
+              {
+                direction: "Down";
+                mode: "OnRelease";
+                action = {
+                  type: "ChangeDPI";
+                  inc: -1000,
+                }
+              }
+            );
+          };
+        }
+      );
+    });
+  '';
   networking.firewall.enable = false;
 
   system.stateVersion = "23.05";
