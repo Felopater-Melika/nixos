@@ -1,4 +1,4 @@
-{hyprland-plugins, lib, config, pkgs, inputs, ... }: {
+{ hyprland-plugins, lib, config, pkgs, inputs, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default
  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
@@ -11,14 +11,9 @@
     pkgs.boxes
     pkgs.gammastep
     pkgs.electron
-    pkgs.hollywood
-    pkgs.lazydocker
-    pkgs.neovide
     pkgs.wayout
     pkgs.kubectl
-    pkgs.devbox
     pkgs.jira-cli-go
-    pkgs.swayidle
     pkgs.kubernetes
     pkgs.btop
     pkgs.k9s
@@ -33,7 +28,7 @@
     pkgs.zoom-us
     pkgs.jetbrains-toolbox
     pkgs.fcitx5
-    pkgs.xfce.thunar
+    pkgs.gnome.nautilus
     pkgs.catppuccin-kvantum
     pkgs.light
     pkgs.brightnessctl
@@ -54,7 +49,8 @@
     pkgs.cbonsai
     pkgs.asciiquarium
     pkgs.cowsay
-    pkgs.figlet pkgs.nms
+    pkgs.figlet
+    pkgs.nms
     pkgs.cmatrix
     pkgs.tty-clock
     pkgs.lolcat
@@ -96,11 +92,11 @@
     pkgs.lxqt.lxqt-qtplugin
     pkgs.cliphist
     pkgs.lazygit
-    pkgs.tmux
     pkgs.catppuccin-papirus-folders
     pkgs.fastfetch
     pkgs.nitch
     pkgs.pgcli
+    pkgs.gitui
     pkgs.commitizen
     pkgs.signal-desktop
     pkgs.xdragon
@@ -136,9 +132,8 @@
       "scratchpads": {
         "term": {
           "command": "kitty --class scratchpad",
-          "animation": "fromTop",
           "margin": 50
-        }
+        },
       }
     }
   '';
@@ -318,8 +313,6 @@ home.pointerCursor = {
           "$git_branch"
           "$git_state"
           "$git_status"
-          "$docker_context"
-          "$nodejs"
           "$nix_shell"
           "$fill"
           "$python"
@@ -351,17 +344,7 @@ home.pointerCursor = {
           truncation_symbol = ".../";
         };
 
-        docker_context = {
-          disabled = false;
-        format = " [🐋 $context](blue bold)";
-        detect_files = [
-          "docker-compose.web-app.yml"
-          "Dockerfile_web-app"
-          "docker-compose.yml" 
-          "docker-compose.yaml" 
-          "Dockerfile"
-        ];
-        };
+        docker_context.symbol = " ";
 
         git_branch = {
           symbol = " ";
@@ -400,20 +383,14 @@ home.pointerCursor = {
         nix_shell = {
           disabled = false;
           symbol = "❄️ ";
-          format = "[ $symbol($name)]($style)";
-        };
-
-        nodejs = {
-          disabled = false;
-          symbol = " ";
-          format = "[$symbol $version](bold green)";
+          format = "via [$symbol($name)]($style)";
         };
       };
     };
   };
   xdg.configFile."Kvantum/kvantum.kvconfig".source =
     (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
-      General.theme = "Catppuccin-Mocha-Blue";
+      General.theme = "Catppuccin-Mocha-Blue"; # "Catppuccin-Mocha-Mauve";
     };
   programs = {
     zsh = {
@@ -473,21 +450,14 @@ home.pointerCursor = {
       '';
 
       shellAliases = {
-        ls = "eza -l --git --group-directories-first  --color=always --icons=always";
-        ll = "eza -lFa --group-directories-first --git --color=always --icons=always";
+        ls = "eza -gl --git --color=always --icons=always";
+        ll = "eza -la --git --color=always --icons=always";
         tree = "eza --tree  --icons=always --git --color=always";
-
-        pni = "pnpm install";
-        pnd = "pnpm dev";
-        pn = "pnpm";
-
         dev = "nix develop -c zsh";
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
 
         ip = "ip --color";
         ipb = "ip --color --brief";
-
-        lazy = "lazygit --use-config-file='/home/philopater/.config/lazygit/config.yml'";
 
         gac = "git add -A  && git commit -a";
         gp = "git push";
@@ -610,7 +580,6 @@ $crust     = 0xff11111b
 
 $mainMod = SUPER
 
-exec-once = pypr
 #-- Output ----------------------------------------------------
 monitor=HDMI-A-1,3440x1440@99.991997,1280x0,1
 monitor=eDP-1,2560x1600@120,0x0,2
@@ -716,13 +685,15 @@ windowrule=float,yad|nm-connection-editor|pavucontrolk|xfce-polkit|kvantummanage
 
 # -- Center for float applications --
 windowrule=center,yad|nm-connection-editor|pavucontrolk|xfce-polkit|kvantummanager|qt5ct|feh|Viewnior|Gpicview|Gimp|MPlayer|VirtualBox Manager|qemu|Qemu-system-x86_64|mpv
- $scratchpadsize = size 80% 85%
+
+   $scratchpadsize = size 80% 85%
 
        $scratchpad = class:^(scratchpad)$
        windowrulev2 = float,$scratchpad
        windowrulev2 = $scratchpadsize,$scratchpad
        windowrulev2 = workspace special silent,$scratchpad
        windowrulev2 = center,$scratchpad
+
 
 # -- Kitty --
 windowrule=opacity 1,kitty
@@ -739,11 +710,14 @@ windowrule=center,neovide
 # -- Spotify --
 windowrule=opacity 0.85,Spotify
 
+# -- VSCodium --
+windowrule=opacity 0.9,VSCodium
+
 # -- Mpv --
 windowrule=size 70% 70%,mpv
 
-# -- Toolbox --
-windowrule=opacity 1,jetbrains-toolbox
+# -- Webstorm --
+windowrule=opacity 0.9,jetbrains-webstorm
 
 plugin {
     hy3 {
@@ -924,7 +898,9 @@ exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRE
 exec-once=hyprctl setcursor Catppuccin-Mocha-Dark-Cursors 24
 exec-once = wl-paste --type text --watch cliphist store #Stores only text data
 exec-once = wl-paste --type image --watch cliphist store #Stores only image data
-exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep "/home/philopater/.config/hypr/scripts/lockscreen"
+exec-once = pypr
+
+
           '';
 };
   home.stateVersion = "23.05";

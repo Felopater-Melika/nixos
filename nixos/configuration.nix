@@ -259,7 +259,7 @@ in {
        target: false;
      };
 
-      dpi: 1500; // max=4000
+      dpi: 1000; // max=4000
 
       buttons: (
         // Forward button for Copy
