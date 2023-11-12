@@ -36,6 +36,7 @@
     pkgs.jetbrains-toolbox
     pkgs.fcitx5
     pkgs.xfce.thunar
+    (pkgs.callPackage ../inshellisense.nix {})
     pkgs.catppuccin-kvantum
     pkgs.light
     pkgs.brightnessctl
@@ -484,6 +485,7 @@ home.pointerCursor = {
 
         dev = "nix develop -c zsh";
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
+        upd = "sudo nix flake update";
 
         tt = "taskwarrior-tui";
 
@@ -931,6 +933,5 @@ exec-once = wl-paste --type image --watch cliphist store #Stores only image data
 exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep "/home/philopater/.config/hypr/scripts/lockscreen"
           '';
 };
-pkgs.callPackage ../inshellisense.nix {}
   home.stateVersion = "23.05";
 }
