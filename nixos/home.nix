@@ -18,8 +18,10 @@
     pkgs.kubectl
     pkgs.devbox
     pkgs.jira-cli-go
+    pkgs.taskwarrior
     pkgs.swayidle
     pkgs.kubernetes
+    pkgs.taskwarrior-tui
     pkgs.btop
     pkgs.k9s
     pkgs.bun
@@ -98,13 +100,12 @@
     pkgs.lazygit
     pkgs.tmux
     pkgs.catppuccin-papirus-folders
-    pkgs.fastfetch
     pkgs.nitch
     pkgs.pgcli
     pkgs.commitizen
     pkgs.signal-desktop
     pkgs.xdragon
-    pkgs.element
+    pkgs.element-desktop
     pkgs.tgpt
     pkgs.newsboat
     pkgs.neomutt
@@ -399,13 +400,13 @@ home.pointerCursor = {
 
         nix_shell = {
           disabled = false;
-          symbol = "❄️ ";
+          symbol = " ";
           format = "[ $symbol($name)]($style)";
         };
 
         nodejs = {
           disabled = false;
-          symbol = " ";
+          symbol = "";
           format = "[$symbol $version](bold green)";
         };
       };
@@ -484,12 +485,15 @@ home.pointerCursor = {
         dev = "nix develop -c zsh";
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
 
+        tt = "taskwarrior-tui";
+
         ip = "ip --color";
         ipb = "ip --color --brief";
 
         lazy = "lazygit --use-config-file='/home/philopater/.config/lazygit/config.yml'";
 
         gac = "git add -A  && git commit -a";
+        gad = "git add .";
         gp = "git push";
         gst = "git status -sb";
 
@@ -804,7 +808,7 @@ $screenshot = ~/.config/hypr/rofi/bin/screenshot
 $lockscreen = ~/.config/hypr/scripts/lockscreen
 $wlogout = ~/.config/hypr/scripts/wlogout
 $colorpicker = ~/.config/hypr/scripts/colorpicker
-$files = nautilus
+$files = thunar
 $editor = kitty nvim
 $clipboard = cliphist list | rofi -dmenu -theme ~/.config/hypr/rofi/themes/mocha.rasi | cliphist decode | wl-copy
 $ide = webstorm
@@ -927,5 +931,6 @@ exec-once = wl-paste --type image --watch cliphist store #Stores only image data
 exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep "/home/philopater/.config/hypr/scripts/lockscreen"
           '';
 };
+pkgs.callPackage ../inshellisense.nix {}
   home.stateVersion = "23.05";
 }
