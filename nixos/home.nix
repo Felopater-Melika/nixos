@@ -813,7 +813,7 @@ $colorpicker = ~/.config/hypr/scripts/colorpicker
 $files = thunar
 $editor = kitty nvim
 $clipboard = cliphist list | rofi -dmenu -theme ~/.config/hypr/rofi/themes/mocha.rasi | cliphist decode | wl-copy
-$ide = webstorm
+$ide = jetbrains-toolbox
 $browser = firefox
 
 # -- Mouse --
@@ -930,8 +930,8 @@ exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRE
 exec-once=hyprctl setcursor Catppuccin-Mocha-Dark-Cursors 24
 exec-once = wl-paste --type text --watch cliphist store #Stores only text data
 exec-once = wl-paste --type image --watch cliphist store #Stores only image data
-exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep "/home/philopater/.config/hypr/scripts/lockscreen"
-          '';
+exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+'';
 };
   home.stateVersion = "23.05";
 }
