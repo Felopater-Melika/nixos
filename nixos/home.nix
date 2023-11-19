@@ -88,7 +88,7 @@
     pkgs.playerctl
     pkgs.grim
     pkgs.slurp
-    pkgs.mpd
+    # pkgs.mpd
     pkgs.mpv
     pkgs.zathura
     pkgs.ranger
@@ -481,7 +481,9 @@ home.pointerCursor = {
 
         pni = "pnpm install";
         pnd = "pnpm dev";
+        pnx = "pnpm dlx";
         pn = "pnpm";
+        nx = "pnpm dlx nx";
 
         dev = "nix develop -c zsh";
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
