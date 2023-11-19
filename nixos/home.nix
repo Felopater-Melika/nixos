@@ -88,7 +88,7 @@
     pkgs.playerctl
     pkgs.grim
     pkgs.slurp
-    # pkgs.mpd
+    pkgs.mpd
     pkgs.mpv
     pkgs.zathura
     pkgs.ranger
