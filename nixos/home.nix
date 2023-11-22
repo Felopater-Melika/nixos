@@ -1,4 +1,4 @@
-{hyprland-plugins, lib, config, pkgs, inputs, modulesPath, ... }: {
+{hyprland-plugins, lib, config, pkgs, inputs, buildDotnet, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default
  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
@@ -7,9 +7,8 @@
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
+  
   home.packages = let
-    buildDotnet = attrs: pkgs.callPackage (import "${modulesPath}/../pkgs/development/compilers/dotnet/build-dotnet.nix" attrs) {};
-
     dotnet8-info = import ./dotnet8.nix;
   dotnet-sdk = buildDotnet dotnet8-info.sdk;
   dotnet-aspnetcore = buildDotnet dotnet8-info.aspnetcore;
@@ -82,7 +81,6 @@ in dotnet-stuff ++ [
     pkgs.pokemonsay
     pkgs.pokemon-colorscripts-mac
     pkgs.sl
-    pkgs.dotnet-sdk_7
     pkgs.oh-my-zsh
     pkgs.libsForQt5.qtstyleplugin-kvantum
     pkgs.qt6Packages.qtstyleplugin-kvantum
