@@ -1,4 +1,4 @@
-{hyprland-plugins, lib, config, pkgs, inputs, ... }: {
+{hyprland-plugins, lib, config, pkgs, inputs, modulesPath, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default
  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
@@ -7,7 +7,17 @@
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  home.packages = [
+  home.packages = let
+    buildDotnet = attrs: pkgs.callPackage (import "${modulesPath}/../pkgs/development/compilers/dotnet/build-dotnet.nix" attrs) {};
+
+    dotnet8-info = import ./dotnet8.nix;
+  dotnet-sdk = buildDotnet dotnet8-info.sdk;
+  dotnet-aspnetcore = buildDotnet dotnet8-info.aspnetcore;
+  dotnet-runtime = buildDotnet dotnet8-info.runtime;
+  dotnet-stuff = [
+    dotnet-sdk dotnet-aspnetcore dotnet-runtime
+  ];
+in dotnet-stuff ++ [
     pkgs.boxes
     pkgs.gammastep
     pkgs.electron
@@ -169,7 +179,7 @@ home.pointerCursor = {
   };
   qt = {
     enable = true;
-    #platformTheme = "qtct";
+    platformTheme = "qtct";
     style.name = "kvantum";
   };
   programs.lf = {
