@@ -7,19 +7,27 @@
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  
+  nixpkgs.overlays = [
+    (self: super: {
+      clickup = import ../clickup.nix { inherit pkgs; };
+    })
+  ];
   home.packages = let
-    dotnet8-info = import ./dotnet8.nix;
+    dotnet8-info = import ../dotnet8.nix;
   dotnet-sdk = buildDotnet dotnet8-info.sdk;
-  dotnet-aspnetcore = buildDotnet dotnet8-info.aspnetcore;
-  dotnet-runtime = buildDotnet dotnet8-info.runtime;
+  # dotnet-aspnetcore = buildDotnet dotnet8-info.aspnetcore;
+  # dotnet-runtime = buildDotnet dotnet8-info.runtime;
   dotnet-stuff = [
-    dotnet-sdk dotnet-aspnetcore dotnet-runtime
+    dotnet-sdk
+    # dotnet-aspnetcore dotnet-runtime
   ];
 in dotnet-stuff ++ [
     pkgs.boxes
     pkgs.gammastep
+    clickup
     pkgs.electron
+    pkgs.appimage-run
+    pkgs.hyprpicker
     pkgs.hollywood
     pkgs.lazydocker
     pkgs.neovide
