@@ -4,8 +4,8 @@ pkgs.appimageTools.wrapType2 {
   name = "clickup";
   src = pkgs.fetchurl {
     url = "https://desktop.clickup.com/linux";
-    sha256 = "1vq4w5ivv6rwcrykj0dmgp258dmbpkax6xd1rna9jsgh6v2g5vm9";
+    sha256 = "sha256-3CD+VA+Id/PAO3+TpKBSe+F/lBUTLTt2AHW9dG709xE=";
   };
-  extraPkgs = pkgs: with pkgs; [ ];
+    extraPkgs = pkgs: with pkgs; [ xorg.libxkbfile ];
 }
 

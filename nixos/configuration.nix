@@ -79,6 +79,8 @@ in {
 
   environment.sessionVariables = {
     # WLR_NO_HARDWARE_CURSORS = "1";
+    # ELECTRON_ENABLE_STACK_DUMPING = "true";
+    # ELECTRON_NO_ATTACH_CONSOLE = "true";
     NIXOS_OZONE_WL = "1";
   };
 
@@ -159,7 +161,6 @@ in {
   environment.systemPackages = with pkgs; [
     nixfmt
     tokyo-night-sddm
-    rofi-wayland
     gh
     home-manager
     swww

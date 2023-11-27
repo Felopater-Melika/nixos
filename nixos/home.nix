@@ -23,8 +23,9 @@
   ];
 in dotnet-stuff ++ [
     pkgs.boxes
+    pkgs.rofi-wayland
     pkgs.gammastep
-    clickup
+    pkgs.clickup
     pkgs.electron
     pkgs.appimage-run
     pkgs.hyprpicker
@@ -851,6 +852,7 @@ bind=SUPER,I,exec,$ide
 bind=SUPER,C,exec,discord --enable-features=UseOzonePlatform --ozone-platform=wayland
 bind=SUPER,M,exec,spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
 bind=SUPER,O,exec,signal-desktop 
+bind=SUPER,T,exec,clickup
 
 # -- Rofi --
 bind=SUPER,D,exec,$launcher
