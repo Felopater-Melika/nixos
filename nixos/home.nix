@@ -1,4 +1,4 @@
-{hyprland-plugins, lib, config, pkgs, inputs, buildDotnet, ... }: {
+{hyprland-plugins, lib, config, pkgs, inputs, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default
  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
@@ -12,16 +12,9 @@
       clickup = import ../clickup.nix { inherit pkgs; };
     })
   ];
-  home.packages = let
-    dotnet8-info = import ../dotnet8.nix;
-  dotnet-sdk = buildDotnet dotnet8-info.sdk;
-  # dotnet-aspnetcore = buildDotnet dotnet8-info.aspnetcore;
-  # dotnet-runtime = buildDotnet dotnet8-info.runtime;
-  dotnet-stuff = [
-    dotnet-sdk
-    # dotnet-aspnetcore dotnet-runtime
-  ];
-in dotnet-stuff ++ [
+
+  home.packages = [
+    pkgs.dotnet-sdk_8
     pkgs.boxes
     pkgs.rofi-wayland
     pkgs.gammastep
@@ -569,6 +562,7 @@ home.pointerCursor = {
           # (pkgs.callPackage ./hyprbars.nix { inherit hyprland-plugins; } )
           # inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
           inputs.hy3.packages.${pkgs.system}.default
+          # inputs.hyprland-plugins.packages.${pkgs.system}.csgo-vulkan-fix
             ];
           extraConfig = ''
 $rosewaterAlpha = f5e0dc
@@ -769,7 +763,7 @@ windowrule=size 70% 70%,mpv
 
 # -- Toolbox --
 windowrule=opacity 1,jetbrains-toolbox
-
+# plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
 plugin {
     hy3 {
         tabs {
@@ -890,6 +884,26 @@ bind=SUPERSHIFT,H,hy3:movewindow,l
 bind=SUPERSHIFT,L,hy3:movewindow,r
 bind=SUPERSHIFT,J,hy3:movewindow,u
 bind=SUPERSHIFT,K,hy3:movewindow,d
+
+# # -- Hyprland --
+# bind=SUPER,Q,killactive,
+# bind=CTRLALT,Delete,exit,
+# bind=SUPER,F,fullscreen,
+# bind=SUPER,Space,togglefloating,
+# bind=SUPER,P,pseudo,
+#
+# # Focus
+# bind=SUPER,H,movefocus,l
+# bind=SUPER,L,movefocus,r
+# bind=SUPER,J,movefocus,u
+# bind=SUPER,K,movefocus,d
+#
+# # Move
+# bind=SUPERSHIFT,H,movewindow,l
+# bind=SUPERSHIFT,L,movewindow,r
+# bind=SUPERSHIFT,J,movewindow,u
+# bind=SUPERSHIFT,K,movewindow,d
+
 # Resize
 bind=SUPERCTRL,left,resizeactive,-20 0
 bind=SUPERCTRL,right,resizeactive,20 0

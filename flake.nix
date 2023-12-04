@@ -52,12 +52,11 @@
         config = { allowUnfree = true; };
       };
 
-      buildDotnet = attrs: pkgs.callPackage (import "${nixpkgs}/pkgs/development/compilers/dotnet/build-dotnet.nix" attrs) {};
 
     in {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit stable-pkgs hyprland-plugins inputs buildDotnet; };
+          specialArgs = { inherit stable-pkgs hyprland-plugins inputs; };
           modules = [ ./nixos/configuration.nix ];
         };
       };

@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, stable-pkgs, buildDotnet, ... }:
+{ inputs, config, pkgs, stable-pkgs, ... }:
 let 
      tokyo-night-sddm = pkgs.libsForQt5.callPackage ./tokyo-night-sddm/default.nix { };
 in {
@@ -9,7 +9,7 @@ in {
 
   users.users.philopater.shell = "${pkgs.zsh}/bin/zsh";
   home-manager = {
-    extraSpecialArgs = { inherit buildDotnet inputs; };
+    extraSpecialArgs = { inherit inputs; };
     users = { philopater = import ./home.nix; };
   };
 
