@@ -17,6 +17,12 @@
     pkgs.dotnet-sdk_8
     pkgs.boxes
     pkgs.rofi-wayland
+    pkgs.gimp
+    pkgs.audacity
+    pkgs.inkscape
+    pkgs.davinci-resolve
+    pkgs.gitflow
+    inputs.nix-super.packages.x86_64-linux.default
     pkgs.gammastep
     pkgs.clickup
     pkgs.electron
@@ -498,8 +504,11 @@ home.pointerCursor = {
         dev = "nix develop -c zsh";
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
         upd = "sudo nix flake update";
+        del = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
 
         tt = "taskwarrior-tui";
+
+        logi = "sudo systemctl restart logiops";
 
         ip = "ip --color";
         ipb = "ip --color --brief";

@@ -6,6 +6,8 @@
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
 
+    nix-super.url = "github:privatevoid-net/nix-super";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +40,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager, chaotic, nur, hyprland
-    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3, ... }@inputs:
+    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3, nix-super, ... }@inputs:
     let
       system = "x86_64-linux";
 

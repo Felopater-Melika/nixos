@@ -34,6 +34,7 @@ in {
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   # Set your time zone.
   time.timeZone = "America/Chicago";
 
@@ -82,6 +83,7 @@ in {
     # ELECTRON_ENABLE_STACK_DUMPING = "true";
     # ELECTRON_NO_ATTACH_CONSOLE = "true";
     NIXOS_OZONE_WL = "1";
+    DOTNET_ROOT = "${pkgs.dotnet-sdk_8}";
   };
 
   systemd = {
