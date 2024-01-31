@@ -37,6 +37,7 @@ in {
   networking.wireless.enable = false;
   # Set your time zone.
   time.timeZone = "America/Chicago";
+  services.ntp.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
   # console = {

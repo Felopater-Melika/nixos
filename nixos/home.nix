@@ -7,24 +7,25 @@
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  nixpkgs.overlays = [
-    (self: super: {
-      clickup = import ../clickup.nix { inherit pkgs; };
-    })
-  ];
+  # nixpkgs.overlays = [
+  #   (self: super: {
+  #     clickup = import ../clickup.nix { inherit pkgs; };
+  #   })
+  # ];
 
   home.packages = [
     pkgs.dotnet-sdk_8
     pkgs.boxes
+    pkgs.todoist-electron
     pkgs.rofi-wayland
+    pkgs.biome
     pkgs.gimp
     pkgs.audacity
     pkgs.inkscape
-    pkgs.davinci-resolve
+    pkgs.alejandra
     pkgs.gitflow
     inputs.nix-super.packages.x86_64-linux.default
     pkgs.gammastep
-    pkgs.clickup
     pkgs.electron
     pkgs.appimage-run
     pkgs.hyprpicker
@@ -855,7 +856,7 @@ bind=SUPER,I,exec,$ide
 bind=SUPER,C,exec,discord --enable-features=UseOzonePlatform --ozone-platform=wayland
 bind=SUPER,M,exec,spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
 bind=SUPER,O,exec,signal-desktop 
-bind=SUPER,T,exec,clickup
+bind=SUPER,T,exec,todoist-electron
 
 # -- Rofi --
 bind=SUPER,D,exec,$launcher
@@ -973,7 +974,7 @@ exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRE
 exec-once=hyprctl setcursor Catppuccin-Mocha-Dark-Cursors 24
 exec-once = wl-paste --type text --watch cliphist store #Stores only text data
 exec-once = wl-paste --type image --watch cliphist store #Stores only image data
-exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+# exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
 '';
 };
   home.stateVersion = "23.05";
