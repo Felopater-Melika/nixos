@@ -61,7 +61,7 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
 
   services.printing.enable = true;
 
@@ -370,6 +370,10 @@ in {
     });
   '';
   networking.firewall.enable = false;
+
+  systemd.oomd.enableRootSlice = true;
+  systemd.oomd.enableSystemSlice = true;
+  systemd.oomd.enableUserSlices = true;
 
   system.stateVersion = "23.05";
 }

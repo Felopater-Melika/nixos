@@ -7,16 +7,18 @@
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     clickup = import ../clickup.nix { inherit pkgs; };
-  #   })
-  # ];
+  nixpkgs.overlays = [
+    (self: super: {
+      clickup = import ../warp.nix { inherit pkgs; };
+    })
+  ];
 
   home.packages = [
     pkgs.dotnet-sdk_8
     pkgs.boxes
     pkgs.todoist-electron
+    pkgs.lavat
+    pkgs.pokeget-rs
     pkgs.rofi-wayland
     pkgs.biome
     pkgs.gimp
@@ -466,7 +468,7 @@ home.pointerCursor = {
       };
 
       initExtra = ''
-          nitch
+          pokeget random --hide-name -s
           bindkey '^[[1;5C' forward-word # Ctrl+RightArrow
           bindkey '^[[1;5D' backward-word # Ctrl+LeftArrow
 
