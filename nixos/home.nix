@@ -1,23 +1,23 @@
-{hyprland-plugins, lib, config, pkgs, inputs, ... }: {
+{hyprland-plugins, lib, config, pkgs, inputs,master-pkgs, ... }: {
 
-  imports = [ inputs.hyprland.homeManagerModules.default
- inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
+  imports = [ inputs.hyprland.homeManagerModules.default  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
   nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-  nixpkgs.overlays = [
-    (self: super: {
-      clickup = import ../warp.nix { inherit pkgs; };
-    })
-  ];
+  # nixpkgs.overlays = [
+  #   (self: super: {
+  #     warp-terminal = import ../warp.nix { inherit pkgs; };
+  #   })
+  # ];
 
   home.packages = [
     pkgs.dotnet-sdk_8
     pkgs.boxes
     pkgs.todoist-electron
     pkgs.lavat
+    master-pkgs.warp-terminal
     pkgs.pokeget-rs
     pkgs.rofi-wayland
     pkgs.biome
@@ -365,7 +365,7 @@ home.pointerCursor = {
 
         directory = {
           read_only = " ";
-          home_symbol = " ~";
+          home_symbol = " ~";
           style = "blue";
           truncate_to_repo = false;
           truncation_length = 5;
