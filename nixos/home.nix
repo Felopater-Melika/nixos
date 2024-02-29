@@ -1,4 +1,4 @@
-{hyprland-plugins, lib, config, pkgs, inputs,master-pkgs, ... }: {
+{hyprland-plugins, lib, config, pkgs, inputs, ... }: {
 
   imports = [ inputs.hyprland.homeManagerModules.default  inputs.nix-colors.homeManagerModules.default ../spicetify.nix ];
 
@@ -17,7 +17,7 @@
     pkgs.boxes
     pkgs.todoist-electron
     pkgs.lavat
-    master-pkgs.warp-terminal
+    inputs.nixpkgs-master.warp-terminal
     pkgs.pokeget-rs
     pkgs.rofi-wayland
     pkgs.biome
