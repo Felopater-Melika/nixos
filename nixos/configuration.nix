@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, stable-pkgs, ... }:
+{ inputs, config, pkgs, stable-pkgs, master-pkgs, ... }:
 let 
      tokyo-night-sddm = pkgs.libsForQt5.callPackage ./tokyo-night-sddm/default.nix { };
 in {
@@ -83,6 +83,7 @@ in {
     # WLR_NO_HARDWARE_CURSORS = "1";
     # ELECTRON_ENABLE_STACK_DUMPING = "true";
     # ELECTRON_NO_ATTACH_CONSOLE = "true";
+    WARP_ENABLE_WAYLAND = "1";
     NIXOS_OZONE_WL = "1";
     DOTNET_ROOT = "${pkgs.dotnet-sdk_8}";
   };
@@ -171,6 +172,7 @@ in {
     neofetch
     pfetch
     fontconfig
+    master-pkgs.warp-terminal
     ripgrep
     qemu
     jetbrains-mono

@@ -55,12 +55,17 @@
         inherit system;
         config = { allowUnfree = true; };
       };
+      
+      master-pkgs = import nixpkgs-master {
+        inherit system;
+        config = { allowUnfree = true; };
+      };
 
       
     in {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit stable-pkgs hyprland-plugins inputs; };
+          specialArgs = { inherit stable-pkgs master-pkgs hyprland-plugins inputs; };
           modules = [ ./nixos/configuration.nix ];
         };
       };

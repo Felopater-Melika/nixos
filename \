@@ -14,7 +14,6 @@
 
   home.packages = [
     pkgs.dotnet-sdk_8
-    pkgs.yazi
     pkgs.boxes
     pkgs.todoist-electron
     pkgs.lavat
@@ -643,7 +642,7 @@ $mainMod = SUPER
 
 exec-once = pypr
 #-- Output ----------------------------------------------------
-monitor=HDMI-A-1,3440x1440@99.991997,1280x0,1
+monitor=HDMI-A-1,3440x1440@99.991997,-1280x0,1
 monitor=eDP-1,2560x1600@120,0x0,2
 #-copeFuzzyCommandSearch) Input ----------------------------------------------------
 # Configure mouse and touchpad here.
