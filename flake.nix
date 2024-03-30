@@ -17,10 +17,15 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
 
-    hyprland-plugins = {
+    hy3 = {
+      url = "github:outfoxxed/hy3";
       inputs.hyprland.follows = "hyprland";
+    };
+
+    hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
-    };  
+      inputs.hyprland.follows = "hyprland";
+    };
 
     hyprland-contrib.url = "github:hyprwm/contrib";
 
@@ -33,16 +38,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hy3 = {
-      url = "github:outfoxxed/hy3";
-      inputs.hyprland.follows = "hyprland";
-    };
-
     nix-colors.url = "github:misterio77/nix-colors";
   };
 
   outputs = { self, nixpkgs, home-manager, chaotic, nur, hyprland
-    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3, nix-super, nixpkgs-master, ... }@inputs:
+    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3
+    , nix-super, nixpkgs-master, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -55,17 +56,17 @@
         inherit system;
         config = { allowUnfree = true; };
       };
-      
+
       master-pkgs = import nixpkgs-master {
         inherit system;
         config = { allowUnfree = true; };
       };
-
-      
     in {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit stable-pkgs master-pkgs hyprland-plugins inputs; };
+          specialArgs = {
+            inherit stable-pkgs master-pkgs hyprland-plugins inputs;
+          };
           modules = [ ./nixos/configuration.nix ];
         };
       };
