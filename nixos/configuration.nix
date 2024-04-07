@@ -20,6 +20,7 @@ in {
   };
 
   nixpkgs.config.permittedInsecurePackages = ["electron-24.8.6" "python-2.7.18.7"];
+  
   fileSystems = {
     "/" = {options = ["compress=zstd"];};
     "/home" = {options = ["compress=zstd"];};

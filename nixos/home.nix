@@ -856,8 +856,8 @@
       $lockscreen = ~/.config/hypr/scripts/lockscreen
       $wlogout = ~/.config/hypr/scripts/wlogout
       $colorpicker = ~/.config/hypr/scripts/colorpicker
-      $files = thunar
-      $editor = kitty nvim
+      $files = nautilus
+      $editor = neovide
       $clipboard = cliphist list | rofi -dmenu -theme ~/.config/hypr/rofi/themes/mocha.rasi | cliphist decode | wl-copy
       $ide = jetbrains-toolbox
       $browser = firefox
@@ -879,7 +879,7 @@
       bind=SUPER,C,exec,discord --enable-features=UseOzonePlatform --ozone-platform=wayland
       bind=SUPER,M,exec,spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
       bind=SUPER,O,exec,signal-desktop
-      bind=SUPER,T,exec,todoist-electron
+      bind=SUPER,P,exec,prismlauncher
 
       # -- Rofi --
       bind=SUPER,D,exec,$launcher
@@ -904,7 +904,7 @@
       bind=CTRLALT,Delete,exit,
       bind=SUPER,F,fullscreen,
       bind=SUPER,Space,togglefloating,
-      bind=SUPER,P,pseudo,
+      # bind=SUPER,P,pseudo,
 
       # Focus
       bind=SUPER,H,hy3:movefocus,l
