@@ -15,7 +15,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland?ref=v0.39.1";
 
     hy3 = {
       url = "github:outfoxxed/hy3";
@@ -39,11 +39,26 @@
     };
 
     nix-colors.url = "github:misterio77/nix-colors";
+
+    ags.url = "github:Aylur/ags";
   };
 
-  outputs = { self, nixpkgs, home-manager, chaotic, nur, hyprland
-    , hyprland-contrib, hyprland-plugins, spicetify-nix, nixpkgs-stable, hy3
-    , nix-super, nixpkgs-master, ... }@inputs:
+  outputs =
+    { self
+    , nixpkgs
+    , home-manager
+    , chaotic
+    , nur
+    , hyprland
+    , hyprland-contrib
+    , hyprland-plugins
+    , spicetify-nix
+    , nixpkgs-stable
+    , hy3
+    , nix-super
+    , nixpkgs-master
+    , ...
+    }@inputs:
     let
       system = "x86_64-linux";
 
@@ -61,7 +76,9 @@
         inherit system;
         config = { allowUnfree = true; };
       };
-    in {
+
+    in
+    {
       nixosConfigurations = {
         myNixos = nixpkgs.lib.nixosSystem {
           specialArgs = {

@@ -19,7 +19,7 @@ in {
     users = {philopater = import ./home.nix;};
   };
 
-  nixpkgs.config.permittedInsecurePackages = ["electron-24.8.6" "python-2.7.18.7"];
+  nixpkgs.config.permittedInsecurePackages = [ "python-2.7.18.8" "electron-24.8.6" ];
   
   fileSystems = {
     "/" = {options = ["compress=zstd"];};
@@ -54,8 +54,8 @@ in {
 
   services.xserver.enable = true;
   # services.geoclue2.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.sddm.theme = "tokyo-night-sddm";
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.theme = "tokyo-night-sddm";
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-hyprland];
@@ -177,7 +177,7 @@ in {
 stylua
   ];
   environment.systemPackages = with pkgs; [
-    nixfmt
+    nixfmt-classic
     wireplumber
     tokyo-night-sddm
     meson

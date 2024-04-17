@@ -1,27 +1,22 @@
-{
-  hyprland-plugins,
-  lib,
-  config,
-  pkgs,
-  inputs,
-  ...
-}: {
-  imports = [inputs.hyprland.homeManagerModules.default inputs.nix-colors.homeManagerModules.default ../spicetify.nix];
+{ lib, inputs, pkgs, ... }: {
+  imports = [
+    inputs.ags.homeManagerModules.default
+    inputs.hyprland.homeManagerModules.default
+    inputs.nix-colors.homeManagerModules.default
+    ../spicetify.nix
+  ];
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
-  nixpkgs.config.permittedInsecurePackages = ["electron-24.8.6"];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-24.8.6" ];
   home.username = "philopater";
   home.homeDirectory = "/home/philopater";
-
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     warp-terminal = import ../warp.nix { inherit pkgs; };
-  #   })
-  # ];
 
   home.packages = [
     pkgs.dotnet-sdk_8
     pkgs.yazi
+    pkgs.vesktop
+    pkgs.blanket
+    pkgs.warp-terminal
     pkgs.boxes
     pkgs.todoist-electron
     pkgs.gnome.nautilus
@@ -70,7 +65,7 @@
     pkgs.jetbrains-toolbox
     pkgs.fcitx5
     pkgs.xfce.thunar
-    (pkgs.callPackage ../inshellisense.nix {})
+    (pkgs.callPackage ../inshellisense.nix { })
     pkgs.catppuccin-kvantum
     pkgs.light
     pkgs.brightnessctl
@@ -164,6 +159,18 @@
       doCheck = false;
     })
   ];
+
+
+ programs.ags = {
+    enable = true;
+
+    # null or path, leave as null if you don't want hm to manage the config
+    configDir = null;
+
+    # additional packages to add to gjs's runtime
+    extraPackages = with pkgs; [ gtksourceview webkitgtk accountsservice ];
+  };
+
   home.file.".config/hypr/pyprland.json".text = ''
     {
       "pyprland": {
@@ -178,9 +185,10 @@
       }
     }
   '';
+
   nixpkgs.config.allowUnfree = true;
 
-  home.sessionVariables = {
+   home.sessionVariables = {
     EDITOR = "nvim";
     "QT_STYLE_OVERRIDE" = "kvantum";
     SHELL = "${pkgs.zsh}/bin/zsh";
@@ -283,9 +291,9 @@
       '';
     };
 
-    gtk3.extraConfig = {gtk-application-prefer-dark-theme = true;};
+    gtk3.extraConfig = { gtk-application-prefer-dark-theme = true; };
 
-    gtk4.extraConfig = {gtk-application-prefer-dark-theme = true;};
+    gtk4.extraConfig = { gtk-application-prefer-dark-theme = true; };
 
     iconTheme = {
       name = "Papirus-Dark";
@@ -301,7 +309,7 @@
     theme = {
       name = "Catppuccin-Mocha-Standard-Blue-Dark";
       package = pkgs.catppuccin-gtk.override {
-        accents = ["blue"];
+        accents = [ "blue" ];
         size = "standard";
         variant = "mocha";
       };
@@ -312,11 +320,11 @@
     enable = true;
     enableZshIntegration = true;
 
-    changeDirWidgetOptions = ["--preview 'tree -C {} | head -200'"];
+    changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
 
     defaultCommand = "rg --files";
 
-    defaultOptions = ["--height 90%" "--border"];
+    defaultOptions = [ "--height 90%" "--border" ];
 
     fileWidgetCommand = "rg --files";
     fileWidgetOptions = [
@@ -407,7 +415,8 @@
         };
 
         git_status = {
-          format = "[[( $conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)";
+          format =
+            "[[( $conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)";
           style = "cyan";
           conflicted = "​=$count ";
           untracked = "​?$count ";
@@ -453,9 +462,10 @@
       };
     };
   };
-  xdg.configFile."Kvantum/kvantum.kvconfig".source = (pkgs.formats.ini {}).generate "kvantum.kvconfig" {
-    General.theme = "Catppuccin-Mocha-Blue";
-  };
+  xdg.configFile."Kvantum/kvantum.kvconfig".source =
+    (pkgs.formats.ini { }).generate "kvantum.kvconfig" {
+      General.theme = "Catppuccin-Mocha-Blue";
+    };
   programs = {
     zsh = {
       oh-my-zsh = {
@@ -514,8 +524,10 @@
       '';
 
       shellAliases = {
-        ls = "eza -l --git --group-directories-first  --color=always --icons=always";
-        ll = "eza -la --group-directories-first --git --color=always --icons=always";
+        ls =
+          "eza -l --git --group-directories-first  --color=always --icons=always";
+        ll =
+          "eza -la --group-directories-first --git --color=always --icons=always";
         tree = "eza --tree  --icons=always --git --color=always";
 
         pni = "pnpm install";
@@ -528,7 +540,8 @@
         swi = "sudo nixos-rebuild switch --flake .#myNixos";
         upd = "sudo nix flake update";
         sus = "sys; upd; swi";
-        del = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
+        del =
+          "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
 
         tt = "taskwarrior-tui";
 
@@ -537,7 +550,8 @@
         ip = "ip --color";
         ipb = "ip --color --brief";
 
-        lazy = "lazygit --use-config-file='/home/philopater/.config/lazygit/config.yml'";
+        lazy =
+          "lazygit --use-config-file='/home/philopater/.config/lazygit/config.yml'";
 
         hollywood = "docker run --rm -it bcbcarl/hollywood";
 
@@ -580,10 +594,12 @@
         opget = ''
           op item get "$(op item list --format=json | jq -r '.[].title' | fzf)"'';
 
-        speedtest = "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -";
+        speedtest =
+          "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -";
 
         cleanup-nix = "sudo nix-collect-garbage -d";
-        reload-nix = "sudo nixos-rebuild switch --flake /home/iggut/nixos-config";
+        reload-nix =
+          "sudo nixos-rebuild switch --flake /home/iggut/nixos-config";
         reload-home = "home-manager switch --flake /home/iggut/nixos-config";
       };
     };
@@ -591,12 +607,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
-    plugins = [
-      # (pkgs.callPackage ./hyprbars.nix { inherit hyprland-plugins; } )
-      # inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
-      inputs.hy3.packages.${pkgs.system}.default
-      # inputs.hyprland-plugins.packages.${pkgs.system}.csgo-vulkan-fix
-    ];
+    plugins = [ inputs.hy3.packages.${pkgs.system}.default ];
     extraConfig = ''
       $rosewaterAlpha = f5e0dc
       $flamingoAlpha  = f2cdcd
@@ -796,7 +807,6 @@
 
       # -- Toolbox --
       windowrule=opacity 1,jetbrains-toolbox
-      # plugin = ${inputs.hy3.packages.x86_64-linux.hy3}/lib/libhy3.so
       plugin {
           hy3 {
               tabs {
@@ -876,7 +886,7 @@
       bind=SUPER,E,exec,$editor
       bind=SUPER,B,exec,$browser
       bind=SUPER,I,exec,$ide
-      bind=SUPER,C,exec,discord --enable-features=UseOzonePlatform --ozone-platform=wayland
+      bind=SUPER,C,exec,vesktop
       bind=SUPER,M,exec,spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
       bind=SUPER,O,exec,signal-desktop
       bind=SUPER,P,exec,prismlauncher
@@ -996,5 +1006,10 @@
       # exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
     '';
   };
+
+
+
+
+
   home.stateVersion = "23.05";
 }
