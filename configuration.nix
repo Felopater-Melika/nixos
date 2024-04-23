@@ -1,12 +1,7 @@
-{
-  inputs,
-  config,
-  pkgs,
-  stable-pkgs,
-  master-pkgs,
-  ...
-}: let
-  tokyo-night-sddm = pkgs.libsForQt5.callPackage ./tokyo-night-sddm/default.nix {};
+{ inputs, config, pkgs, stable-pkgs, master-pkgs, ... }:
+let
+  tokyo-night-sddm =
+    pkgs.libsForQt5.callPackage ./tokyo-night-sddm/default.nix { };
 in {
   imports = [
     ./hardware-configuration.nix
@@ -15,16 +10,17 @@ in {
 
   users.users.philopater.shell = "${pkgs.zsh}/bin/zsh";
   home-manager = {
-    extraSpecialArgs = {inherit inputs;};
-    users = {philopater = import ./home.nix;};
+    extraSpecialArgs = { inherit inputs; };
+    users = { philopater = import ./home.nix; };
   };
 
-  nixpkgs.config.permittedInsecurePackages = [ "python-2.7.18.8" "electron-24.8.6" ];
-  
+  nixpkgs.config.permittedInsecurePackages =
+    [ "python-2.7.18.8" "electron-24.8.6" ];
+
   fileSystems = {
-    "/" = {options = ["compress=zstd"];};
-    "/home" = {options = ["compress=zstd"];};
-    "/nix" = {options = ["compress=zstd" "noatime"];};
+    "/" = { options = [ "compress=zstd" ]; };
+    "/home" = { options = [ "compress=zstd" ]; };
+    "/nix" = { options = [ "compress=zstd" "noatime" ]; };
   };
 
   boot.loader.systemd-boot.enable = true;
@@ -58,7 +54,7 @@ in {
   services.displayManager.sddm.theme = "tokyo-night-sddm";
 
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-hyprland];
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -82,13 +78,22 @@ in {
     pulse.enable = true;
     jack.enable = true;
   };
-  
-  services.xserver.videoDrivers = [ "amdgpu" ];
-  
-  hardware.opengl = {
-    enable = true;
-    driSupport32Bit = true;
-  };
+
+  # services.xserver.videoDrivers = [ "amdgpu" ];
+
+  #  hardware.opengl = {
+  #   enable = true;
+  #  driSupport32Bit = true;
+  #  extraPackages = with pkgs; [
+  #     amdvlk
+  #     rocmPackages.clr.icd
+
+  #];
+  # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+
+  # };
+  #
+  hardware.opengl.enable = true;
 
   environment.sessionVariables = {
     # WLR_NO_HARDWARE_CURSORS = "1";
@@ -102,12 +107,13 @@ in {
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";
-      wantedBy = ["graphical-session.target"];
-      wants = ["graphical-session.target"];
-      after = ["graphical-session.target"];
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        ExecStart =
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
@@ -126,14 +132,14 @@ in {
       source-han-sans
       source-han-sans-japanese
       source-han-serif-japanese
-      (nerdfonts.override {fonts = ["JetBrainsMono"];})
+      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-        monospace = ["JetBrains Mono Nerd Font"];
-        serif = ["Noto Serif" "Source Han Serif"];
-        sansSerif = ["Noto Sans" "Source Han Sans"];
+        monospace = [ "JetBrains Mono Nerd Font" ];
+        serif = [ "Noto Serif" "Source Han Serif" ];
+        sansSerif = [ "Noto Sans" "Source Han Sans" ];
       };
     };
   };
@@ -147,8 +153,8 @@ in {
     enableUserService = true;
   };
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-  security.pam.services.swaylock = {};
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  security.pam.services.swaylock = { };
 
   users.users.philopater = {
     isNormalUser = true;
@@ -169,13 +175,11 @@ in {
       "users"
       "video"
     ];
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
   programs.nix-ld.enable = true;
 
-  programs.nix-ld.libraries = with pkgs; [
-stylua
-  ];
+  programs.nix-ld.libraries = with pkgs; [ stylua ];
   environment.systemPackages = with pkgs; [
     nixfmt-classic
     wireplumber
@@ -211,37 +215,11 @@ stylua
     brave
     geoclue2
     neovim
-    (pkgs.discord.override {
-      src = builtins.fetchTarball {
-        url = "https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.tar.gz";
-        sha256 = "sha256:0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd";
-      };
-      withOpenASAR = true;
-      withVencord = true;
-      vencord = pkgs.vencord.overrideAttrs {
-        src = fetchFromGitHub {
-          owner = "Vendicated";
-          repo = "Vencord";
-          rev = "70943455161031d63a4481249d14833afe94f5a5";
-          hash = "sha256-i/n7qPQ/dloLUYR6sj2fPJnvvL80/OQC3s6sOqhu2dQ=";
-        };
-      };
-    })
     kitty
     firefox
     wget
   ];
 
-  nixpkgs.overlays = [
-    (self: super: {
-      discord = super.discord.overrideAttrs (_: {
-        src = builtins.fetchTarball {
-          url = "https://discord.com/api/download?platform=linux&format=tar.gz";
-          sha256 = "0qzdvyyialvpiwi9mppbqvf2rvz1ps25mmygqqck0z9i2q01c1zd"; # 52 0's
-        };
-      });
-    })
-  ];
   services.openssh.enable = true;
   systemd.services.logiops = {
     description = "An unofficial userspace driver for HID++ Logitech devices";
@@ -429,12 +407,12 @@ stylua
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
-    fileSystems = ["/"];
+    fileSystems = [ "/" ];
   };
 
   systemd.oomd.enableRootSlice = true;
   systemd.oomd.enableSystemSlice = true;
   systemd.oomd.enableUserSlices = true;
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 }

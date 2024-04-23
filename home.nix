@@ -21,7 +21,6 @@
     pkgs.todoist-electron
     pkgs.gnome.nautilus
     pkgs.gitui
-    pkgs.ferium
     pkgs.prismlauncher-qt5
     pkgs.dolphin
     pkgs.minecraft
@@ -49,6 +48,8 @@
     pkgs.jira-cli-go
     pkgs.taskwarrior
     pkgs.swayidle
+    pkgs.hypridle
+    pkgs.hyprlock
     pkgs.kubernetes
     pkgs.taskwarrior-tui
     pkgs.btop
@@ -56,6 +57,7 @@
     pkgs.bun
     pkgs.copyq
     pkgs.vim
+    pkgs.flameshot
     pkgs.deno
     pkgs.wayout
     pkgs.dwt1-shell-color-scripts
@@ -160,8 +162,7 @@
     })
   ];
 
-
- programs.ags = {
+  programs.ags = {
     enable = true;
 
     # null or path, leave as null if you don't want hm to manage the config
@@ -188,7 +189,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
-   home.sessionVariables = {
+  home.sessionVariables = {
     EDITOR = "nvim";
     "QT_STYLE_OVERRIDE" = "kvantum";
     SHELL = "${pkgs.zsh}/bin/zsh";
@@ -212,7 +213,7 @@
   };
   qt = {
     enable = true;
-    platformTheme = "qtct";
+    platformTheme.name = "qtct";
     style.name = "kvantum";
   };
   programs.lf = {
@@ -607,7 +608,6 @@
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
-    plugins = [ inputs.hy3.packages.${pkgs.system}.default ];
     extraConfig = ''
       $rosewaterAlpha = f5e0dc
       $flamingoAlpha  = f2cdcd
@@ -711,7 +711,7 @@
           col.active_border=$blue
           col.inactive_border=0xFF343A40
 
-          layout = hy3
+          layout = dwindle
           # damage_tracking=2 # leave it on full unless you hate your GPU and want to make it suffer
       }
        # xwayland {
@@ -807,54 +807,7 @@
 
       # -- Toolbox --
       windowrule=opacity 1,jetbrains-toolbox
-      plugin {
-          hy3 {
-              tabs {
-                  height = 5
-      	          padding = 8
-      	          render_text = false
-              }
 
-              autotile {
-                  enable = true
-                  trigger_width = 800
-                  trigger_height = 500
-              }
-
-              tabs {
-                 col.active = $blue
-                 col.inactive = 0xFF343A40
-              }
-          }
-          # hyprbars {
-          #     # example config
-          #     bar_height = 20
-          #     bar_color = $blue
-          #     col.text = $text
-          #
-          #     # example buttons (R -> L)
-          #     # hyprbars-button = color, size, on-click
-          #     hyprbars-button = rgb(ff4040), 10, 󰖭, hyprctl dispatch killactive
-          #     hyprbars-button = rgb(eeee11), 10, , hyprctl dispatch fullscreen 1
-          # }
-      }
-          # plugin {
-          #      hyprbars {
-          #        bar_height = 0
-          #        bar_color = 0xee
-          #        col.text = 0xff
-          #        bar_text_font =
-          #        bar_text_size = 12
-          #
-          #        buttons {
-          #          button_size = 0
-          #          col.maximize = 0xff
-          #          col.close = 0xff
-          #          }
-          #      }
-          #    }
-          #
-          #
       #-- Keybindings ----------------------------------------------------
       # Variables
       $term = ~/.config/hypr/scripts/terminal
@@ -910,23 +863,23 @@
       bind=,XF86AudioStop,exec,mpc stop
 
       # -- Hyprland --
-      bind=SUPER,Q,hy3:killactive,
+      bind=SUPER,Q,killactive,
       bind=CTRLALT,Delete,exit,
       bind=SUPER,F,fullscreen,
       bind=SUPER,Space,togglefloating,
       # bind=SUPER,P,pseudo,
 
       # Focus
-      bind=SUPER,H,hy3:movefocus,l
-      bind=SUPER,L,hy3:movefocus,r
-      bind=SUPER,J,hy3:movefocus,u
-      bind=SUPER,K,hy3:movefocus,d
+      bind=SUPER,H,movefocus,l
+      bind=SUPER,L,movefocus,r
+      bind=SUPER,J,movefocus,u
+      bind=SUPER,K,movefocus,d
 
       # Move
-      bind=SUPERSHIFT,H,hy3:movewindow,l
-      bind=SUPERSHIFT,L,hy3:movewindow,r
-      bind=SUPERSHIFT,J,hy3:movewindow,u
-      bind=SUPERSHIFT,K,hy3:movewindow,d
+      bind=SUPERSHIFT,H,movewindow,l
+      bind=SUPERSHIFT,L,movewindow,r
+      bind=SUPERSHIFT,J,movewindow,u
+      bind=SUPERSHIFT,K,movewindow,d
 
       # # -- Hyprland --
       # bind=SUPER,Q,killactive,
@@ -994,22 +947,16 @@
       bind = ,238, exec, brightnessctl -d asus::kbd_backlight set 33%+ # Keyboard brightnes up FN+F3
       bind = ,210, exec, asusctl led-mode -n # Switch keyboard RGB profile FN+F4
 
-      bind = SUPER,Z,hy3:makegroup,tab
-      bind = SUPER,U,hy3:makegroup,h
-      bind = SUPER,Y,hy3:makegroup,v
       bind = SUPER,N,exec,pypr toggle term && hyprctl dispatch bringactivetotop
       #-- Startup ----------------------------------------------------
       exec-once=~/.config/hypr/scripts/startup
       # exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       # exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+      exec-once = wl-paste --type text --watch cliphist store #Stores only text data
       exec-once = wl-paste --type image --watch cliphist store #Stores only image data
       # exec-once = swayidle -w timeout 300 '/home/philopater/.config/hypr/scripts/lockscreen' timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
     '';
   };
 
-
-
-
-
-  home.stateVersion = "23.05";
+  home.stateVersion = "23.11";
 }
