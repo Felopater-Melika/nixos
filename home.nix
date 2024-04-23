@@ -3,7 +3,7 @@
     inputs.ags.homeManagerModules.default
     inputs.hyprland.homeManagerModules.default
     inputs.nix-colors.homeManagerModules.default
-    ../spicetify.nix
+    ./spicetify.nix
   ];
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
@@ -67,7 +67,6 @@
     pkgs.jetbrains-toolbox
     pkgs.fcitx5
     pkgs.xfce.thunar
-    (pkgs.callPackage ../inshellisense.nix { })
     pkgs.catppuccin-kvantum
     pkgs.light
     pkgs.brightnessctl
@@ -166,7 +165,7 @@
     enable = true;
 
     # null or path, leave as null if you don't want hm to manage the config
-    configDir = null;
+    configDir = ./ags;
 
     # additional packages to add to gjs's runtime
     extraPackages = with pkgs; [ gtksourceview webkitgtk accountsservice ];

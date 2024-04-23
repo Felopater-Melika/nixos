@@ -79,21 +79,20 @@ in {
     jack.enable = true;
   };
 
-  # services.xserver.videoDrivers = [ "amdgpu" ];
+   services.xserver.videoDrivers = [ "modesetting" ];
 
-  #  hardware.opengl = {
-  #   enable = true;
-  #  driSupport32Bit = true;
-  #  extraPackages = with pkgs; [
-  #     amdvlk
-  #     rocmPackages.clr.icd
+    hardware.opengl = {
+     enable = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+       amdvlk
+       rocmPackages.clr.icd
 
-  #];
-  # extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+  ];
+   extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
 
-  # };
-  #
-  hardware.opengl.enable = true;
+ };
+  
 
   environment.sessionVariables = {
     # WLR_NO_HARDWARE_CURSORS = "1";
